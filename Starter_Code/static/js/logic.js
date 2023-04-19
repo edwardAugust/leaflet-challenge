@@ -1,6 +1,15 @@
 // Use this link to get the GeoJSON data.
 const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson'
 
+function setColor(magnitude){
+  return magnitude > 5? #de163a:
+    magnitude > 4? #cf1593:
+    magnitude > 3? #7810c7:
+    #1b0dd6:
+    #0a52d9:
+    #66cdaa;
+}
+
 
 function map(points){
   let myMap = L.map("map", {
@@ -20,10 +29,13 @@ d3.json(url).then(function(data) {
   // L.geoJson(data).addTo(myMap);
   console.log(data.features)
     data = data.features
+    // read the geoJSON and create path to "properties"
     let points = L.geoJSON(data, {
       pointToLayer: function(feature, latlng) {
+      // point size and color 
       return new L.CircleMarker(latlng, {
-          radius: feature.properties.mag*5, 
+          radius: feature.properties.mag*5,
+          fillColor: setColor(feature.properties.mag), 
           fillOpacity: 0.85
     })
   }});
